@@ -82,22 +82,22 @@ def gameloop():
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot1[1],handSlot6[1] + cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot1[2], handSlot1[2] + cardHeight):
 						mouseX = pygame.mouse.get_pos()[0]
 						mouseY = pygame.mouse.get_pos()[1]
-						if mouseX in range(handSlot1[1],handSlot1[1] + cardWidth):
+						if mouseX in range(handSlot1[1],handSlot1[1] + cardWidth) and handSlot1[0]:
 							playMode = handSlots[1]
 							
-						elif mouseX in range(handSlot2[1],handSlot2[1] + cardWidth):
+						elif mouseX in range(handSlot2[1],handSlot2[1] + cardWidth) and handSlot2[0]:
 							playMode = handSlots[2]
 
-						elif mouseX in range(handSlot3[1],handSlot3[1] + cardWidth):
+						elif mouseX in range(handSlot3[1],handSlot3[1] + cardWidth) and handSlot3[0]:
 							playMode = handSlots[3]
 
-						elif mouseX in range(handSlot4[1],handSlot4[1] + cardWidth):
+						elif mouseX in range(handSlot4[1],handSlot4[1] + cardWidth) and handSlot4[0]:
 							playMode = handSlots[4]
 
-						elif mouseX in range(handSlot5[1],handSlot5[1] + cardWidth):
+						elif mouseX in range(handSlot5[1],handSlot5[1] + cardWidth) and handSlot5[0]:
 							playMode = handSlots[5]
 
-						elif mouseX in range(handSlot6[1],handSlot6[1] + cardWidth):
+						elif mouseX in range(handSlot6[1],handSlot6[1] + cardWidth) and handSlot6[0]:
 							playMode = handSlots[6]
 				
 				elif playMode != handSlots[0]:
@@ -135,21 +135,50 @@ def gameloop():
 						
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot1[1],handSlot1[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot1[2], handSlot1[2]+cardHeight):
 						handSlot1[0] = False
+						discardMode = False
 					
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot2[1],handSlot2[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot2[2], handSlot2[2]+cardHeight):
 						handSlot2[0] = False
+						discardMode = False
 
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot3[1],handSlot3[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot3[2], handSlot3[2]+cardHeight):
 						handSlot3[0] = False
+						discardMode = False
 
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot4[1],handSlot4[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot4[2], handSlot4[2]+cardHeight):
 						handSlot4[0] = False
+						discardMode = False
 
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot5[1],handSlot5[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot5[2], handSlot5[2]+cardHeight):
 						handSlot5[0] = False
+						discardMode = False
 
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot6[1],handSlot6[1]+cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot6[2], handSlot6[2]+cardHeight):
 						handSlot6[0] = False
+						discardMode = False
+
+					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
+						mouseX = pygame.mouse.get_pos()[0]
+						mouseY = pygame.mouse.get_pos()[1]
+						if mouseX in range(playSlot1[1],playSlot1[1]+cardWidth) and playSlot1[0]:
+							playSlot1[0] = False
+							discardMode = False
+						
+						elif mouseX in range(playSlot2[1],playSlot2[1]+cardWidth) and playSlot2[0]:
+							playSlot2[0] = False
+							discardMode = False
+						
+						elif mouseX in range(playSlot3[1],playSlot3[1]+cardWidth) and playSlot3[0]:
+							playSlot3[0] = False
+							discardMode = False
+						
+						elif mouseX in range(playSlot4[1],playSlot4[1]+cardWidth) and playSlot4[0]:
+							playSlot4[0] = False
+							discardMode = False
+						
+						elif mouseX in range(playSlot5[1],playSlot5[1]+cardWidth) and playSlot5[0]:
+							playSlot5[0] = False
+							discardMode = False
 		
 		gameDisplay.fill(backgroundColour)
 		pygame.draw.rect(gameDisplay, playMat, (240,20,800,474))
