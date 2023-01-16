@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pygame.init()
 
@@ -25,6 +26,19 @@ FPS = 30
 
 font = pygame.font.SysFont(None, 25)
 
+cards = {
+	"Grud": [1, 2, 1],
+	"LiterallyJustABear": [3, 4, 3],
+	"Ferret": [1, 3, 2],
+	"RatsRatsWe'reTheRats": [3, 1, 2]
+}
+
+tempCardIDList = ['none']
+for key in cards.keys():
+	tempCardIDList.append(key)
+
+cardIDs = tuple(tempCardIDList)
+
 gameDisplay = pygame.display.set_mode((displayWidth,displayHeight))
 pygame.display.set_caption('Kartice')
 
@@ -35,24 +49,24 @@ def messagetoscreen(msg,colour = white, size = 25, x=0,y=0):
 	gameDisplay.blit(textSurf,(x,y))		
 
 def gameloop():
-	handSlot1 = [False, 243, displayHeight - (cardHeight + 22)]
-	handSlot2 = [False, handSlot1[1] + cardWidth + handSpacing, handSlot1[2]]
-	handSlot3 = [False, handSlot2[1] + cardWidth + handSpacing, handSlot1[2]]
-	handSlot4 = [False, handSlot3[1] + cardWidth + handSpacing, handSlot1[2]]
-	handSlot5 = [False, handSlot4[1] + cardWidth + handSpacing, handSlot1[2]]
-	handSlot6 = [False, handSlot5[1] + cardWidth + handSpacing, handSlot1[2]]
+	handSlot1 = [cardIDs[0], 243, displayHeight - (cardHeight + 22)]
+	handSlot2 = [cardIDs[0], handSlot1[1] + cardWidth + handSpacing, handSlot1[2], 0]
+	handSlot3 = [cardIDs[0], handSlot2[1] + cardWidth + handSpacing, handSlot1[2], 0]
+	handSlot4 = [cardIDs[0], handSlot3[1] + cardWidth + handSpacing, handSlot1[2], 0]
+	handSlot5 = [cardIDs[0], handSlot4[1] + cardWidth + handSpacing, handSlot1[2], 0]
+	handSlot6 = [cardIDs[0], handSlot5[1] + cardWidth + handSpacing, handSlot1[2], 0]
 
-	playSlot1 = [False, 290]
-	playSlot2 = [False, playSlot1[1] + cardWidth + playSpacing]
-	playSlot3 = [False, playSlot2[1] + cardWidth + playSpacing]
-	playSlot4 = [False, playSlot3[1] + cardWidth + playSpacing]
-	playSlot5 = [False, playSlot4[1] + cardWidth + playSpacing]
+	playSlot1 = [cardIDs[0], 290]
+	playSlot2 = [cardIDs[0], playSlot1[1] + cardWidth + playSpacing, playerCardY, 0, 0]
+	playSlot3 = [cardIDs[0], playSlot2[1] + cardWidth + playSpacing, playerCardY, 0, 0]
+	playSlot4 = [cardIDs[0], playSlot3[1] + cardWidth + playSpacing, playerCardY, 0, 0]
+	playSlot5 = [cardIDs[0], playSlot4[1] + cardWidth + playSpacing, playerCardY, 0, 0]
 
-	opponentSlot1 = [False, playSlot1[1]]
-	opponentSlot2 = [False, playSlot2[1]]
-	opponentSlot3 = [False, playSlot3[1]]
-	opponentSlot4 = [False, playSlot4[1]]
-	opponentSlot5 = [False, playSlot5[1]]
+	opponentSlot1 = [cardIDs[0], playSlot1[1], opponentCardY, 0, 0]
+	opponentSlot2 = [cardIDs[0], playSlot2[1], opponentCardY, 0, 0]
+	opponentSlot3 = [cardIDs[0], playSlot3[1], opponentCardY, 0, 0]
+	opponentSlot4 = [cardIDs[0], playSlot4[1], opponentCardY, 0, 0]
+	opponentSlot5 = [cardIDs[0], playSlot5[1], opponentCardY, 0, 0]
 
 	fullHandMessageTime = 0
 	discardMode = False
@@ -69,8 +83,8 @@ def gameloop():
 				if not discardMode and playMode == handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(1098,1098+cardWidth) and pygame.mouse.get_pos()[1] in range(360, 360+cardHeight):
 						for i in range(1,7):
-							if not locals()['handSlot' + str(i)][0]:
-								locals()['handSlot' + str(i)][0] = True
+							if locals()['handSlot' + str(i)][0] == cardIDs[0]:
+								locals()['handSlot' + str(i)][0] = cardIDs[random.randint(1,len(cardIDs))]
 								break
 							else:
 								if i == 6:
@@ -105,8 +119,8 @@ def gameloop():
 						mouseX = pygame.mouse.get_pos()[0]
 						mouseY = pygame.mouse.get_pos()[1]
 						if mouseX in range(playSlot1[1],playSlot1[1]+cardWidth):
-							locals()[playMode][0] = False
-							playSlot1[0] = True
+							playSlot1[0] = locals()[playMode][0]
+							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
 						
 						elif mouseX in range(playSlot2[1],playSlot2[1]+cardWidth):
