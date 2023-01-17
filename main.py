@@ -119,7 +119,7 @@ def gameloop():
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
 						mouseX = pygame.mouse.get_pos()[0]
 						mouseY = pygame.mouse.get_pos()[1]
-						if mouseX in range(playSlot1[1],playSlot1[1]+cardWidth):
+						if mouseX in range(playSlot1[1],playSlot1[1]+cardWidth) and playSlot1[0] == cardIDs[0]:
 							playSlot1[0] = locals()[playMode][0]
 							playSlot1[3] = cards[locals()[playMode][0]][0]
 							playSlot1[4] = cards[locals()[playMode][0]][1]
@@ -127,7 +127,7 @@ def gameloop():
 							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
 						
-						elif mouseX in range(playSlot2[1],playSlot2[1]+cardWidth):
+						elif mouseX in range(playSlot2[1],playSlot2[1]+cardWidth) and playSlot2[0] == cardIDs[0]:
 							playSlot2[0] = locals()[playMode][0]
 							playSlot2[3] = cards[locals()[playMode][0]][0]
 							playSlot2[4] = cards[locals()[playMode][0]][1]
@@ -135,7 +135,7 @@ def gameloop():
 							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
 						
-						elif mouseX in range(playSlot3[1],playSlot3[1]+cardWidth):
+						elif mouseX in range(playSlot3[1],playSlot3[1]+cardWidth) and playSlot3[0] == cardIDs[0]:
 							playSlot3[0] = locals()[playMode][0]
 							playSlot3[3] = cards[locals()[playMode][0]][0]
 							playSlot3[4] = cards[locals()[playMode][0]][1]
@@ -143,7 +143,7 @@ def gameloop():
 							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
 						
-						elif mouseX in range(playSlot4[1],playSlot4[1]+cardWidth):
+						elif mouseX in range(playSlot4[1],playSlot4[1]+cardWidth) and playSlot4[0] == cardIDs[0]:
 							playSlot4[0] = locals()[playMode][0]
 							playSlot4[3] = cards[locals()[playMode][0]][0]
 							playSlot4[4] = cards[locals()[playMode][0]][1]
@@ -151,13 +151,16 @@ def gameloop():
 							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
 						
-						elif mouseX in range(playSlot5[1],playSlot5[1]+cardWidth):
+						elif mouseX in range(playSlot5[1],playSlot5[1]+cardWidth) and playSlot5[0] == cardIDs[0]:
 							playSlot5[0] = locals()[playMode][0]
 							playSlot5[3] = cards[locals()[playMode][0]][0]
 							playSlot5[4] = cards[locals()[playMode][0]][1]
 							print(playSlot5)
 							locals()[playMode][0] = cardIDs[0]
 							playMode = handSlots[0]
+
+					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(locals()[playMode][1],locals()[playMode][1]+cardWidth) and pygame.mouse.get_pos()[1] in range(locals()[playMode][2],locals()[playMode][2]+cardHeight):
+						playMode = handSlots[0]
 						
 				else:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(58,58+cardWidth) and pygame.mouse.get_pos()[1] in range(360, 360+cardHeight):
