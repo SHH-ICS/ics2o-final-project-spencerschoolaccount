@@ -23,6 +23,15 @@ displayHeight = 720
 handSpacing = 10
 playSpacing = 20
 
+discardX = 58
+discardY = 360
+
+pileX = 1098
+pileY = 360
+
+endTurnX = 1098
+endTurnY = pileY - cardWidth - 100
+
 FPS = 30
 
 font = pygame.font.SysFont(None, 25)
@@ -47,7 +56,7 @@ clock = pygame.time.Clock()
 
 def messagetoscreen(msg,colour = white, size = 25, x=0,y=0):
 	textSurf= font.render(msg, True, colour)
-	gameDisplay.blit(textSurf,(x,y))		
+	gameDisplay.blit(textSurf,(x,y))
 
 def gameloop():
 	handSlot1 = [cardIDs[0], 243, displayHeight - (cardHeight + 22)]
@@ -82,7 +91,7 @@ def gameloop():
 
 			elif event.type == pygame.MOUSEBUTTONUP:
 				if not discardMode and playMode == handSlots[0]:
-					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(1098,1098+cardWidth) and pygame.mouse.get_pos()[1] in range(360, 360+cardHeight):
+					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(pileX,pileX+cardWidth) and pygame.mouse.get_pos()[1] in range(pileY, pileY+cardHeight):
 						for i in range(1,7):
 							if locals()['handSlot' + str(i)][0] == cardIDs[0]:
 								locals()['handSlot' + str(i)][0] = cardIDs[random.randint(1,len(cardIDs)-1)]
@@ -91,7 +100,7 @@ def gameloop():
 								if i == 6:
 									fullHandMessageTime = 2 * FPS
 	
-					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(58,58+cardWidth) and pygame.mouse.get_pos()[1] in range(360, 360+cardHeight):
+					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(discardX,discardX+cardWidth) and pygame.mouse.get_pos()[1] in range(discardY, discardY+cardHeight):
 						discardMode = True
 
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot1[1],handSlot6[1] + cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot1[2], handSlot1[2] + cardHeight):
@@ -163,7 +172,7 @@ def gameloop():
 						playMode = handSlots[0]
 						
 				else:
-					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(58,58+cardWidth) and pygame.mouse.get_pos()[1] in range(360, 360+cardHeight):
+					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(discardX,discardX+cardWidth) and pygame.mouse.get_pos()[1] in range(discardX, discardX+cardHeight):
 						discardMode = False
 						
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(handSlot1[1],handSlot6[1] + cardWidth) and pygame.mouse.get_pos()[1] in range(handSlot1[2], handSlot1[2] + cardHeight):
@@ -231,32 +240,76 @@ def gameloop():
 		pygame.draw.rect(gameDisplay, backgroundColour, (playSlot4[1], playerCardY, cardWidth, cardHeight))
 		pygame.draw.rect(gameDisplay, backgroundColour, (playSlot5[1], playerCardY, cardWidth, cardHeight))
 
-		pygame.draw.rect(gameDisplay, blue, (1098, 360, cardWidth, cardHeight))
-		pygame.draw.rect(gameDisplay, green, (58, 360, cardWidth, cardHeight))
+		pygame.draw.rect(gameDisplay, blue, (pileX, pileY, cardWidth, cardHeight))
+		pygame.draw.rect(gameDisplay, green, (discardX, discardY, cardWidth, cardHeight))
+		pygame.draw.rect(gameDisplay, red, (endTurnX, endTurnY, cardWidth, cardWidth))
 
 		if handSlot1[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot1[0]][3], (handSlot1[1], handSlot1[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot1[0]][0]), x=handSlot1[1], y=handSlot1[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot1[0]][1]), x=handSlot1[1] + cardWidth - handSpacing, y=handSlot1[2] + cardHeight/2)
 		if handSlot2[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot2[0]][3], (handSlot2[1], handSlot2[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot2[0]][0]), x=handSlot2[1], y=handSlot2[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot2[0]][1]), x=handSlot2[1] + cardWidth - handSpacing, y=handSlot2[2] + cardHeight/2)
 		if handSlot3[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot3[0]][3], (handSlot3[1], handSlot3[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot3[0]][0]), x=handSlot3[1], y=handSlot3[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot3[0]][1]), x=handSlot3[1] + cardWidth - handSpacing, y=handSlot3[2] + cardHeight/2)
 		if handSlot4[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot4[0]][3], (handSlot4[1], handSlot4[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot4[0]][0]), x=handSlot4[1], y=handSlot4[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot4[0]][1]), x=handSlot4[1] + cardWidth - handSpacing, y=handSlot4[2] + cardHeight/2)
 		if handSlot5[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot5[0]][3], (handSlot5[1], handSlot5[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot5[0]][0]), x=handSlot5[1], y=handSlot5[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot5[0]][1]), x=handSlot5[1] + cardWidth - handSpacing, y=handSlot5[2] + cardHeight/2)
 		if handSlot6[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[handSlot6[0]][3], (handSlot6[1], handSlot6[2], cardWidth, cardHeight))
+			messagetoscreen(str(cards[handSlot6[0]][0]), x=handSlot6[1], y=handSlot6[2] + cardHeight/2)
+			messagetoscreen(str(cards[handSlot6[0]][1]), x=handSlot6[1] + cardWidth - handSpacing, y=handSlot6[2] + cardHeight/2)
 			
 		if playSlot1[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[playSlot1[0]][3], (playSlot1[1], playerCardY, cardWidth, cardHeight))
+			messagetoscreen(str(playSlot1[3]), x=playSlot1[1], y=playSlot1[2] + cardHeight/2)
+			messagetoscreen(str(playSlot1[4]), x=playSlot1[1] + cardWidth - handSpacing, y=playSlot1[2] + cardHeight/2)
 		if playSlot2[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[playSlot2[0]][3], (playSlot2[1], playerCardY, cardWidth, cardHeight))
+			messagetoscreen(str(playSlot2[3]), x=playSlot2[1], y=playSlot2[2] + cardHeight/2)
+			messagetoscreen(str(playSlot2[4]), x=playSlot2[1] + cardWidth - handSpacing, y=playSlot2[2] + cardHeight/2)
 		if playSlot3[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[playSlot3[0]][3], (playSlot3[1], playerCardY, cardWidth, cardHeight))
+			messagetoscreen(str(playSlot3[3]), x=playSlot3[1], y=playSlot3[2] + cardHeight/2)
+			messagetoscreen(str(playSlot3[4]), x=playSlot3[1] + cardWidth - handSpacing, y=playSlot3[2] + cardHeight/2)
 		if playSlot4[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[playSlot4[0]][3], (playSlot4[1], playerCardY, cardWidth, cardHeight))
+			messagetoscreen(str(playSlot4[3]), x=playSlot4[1], y=playSlot4[2] + cardHeight/2)
+			messagetoscreen(str(playSlot4[4]), x=playSlot4[1] + cardWidth - handSpacing, y=playSlot4[2] + cardHeight/2)
 		if playSlot5[0] != cardIDs[0]:
 			pygame.draw.rect(gameDisplay, cards[playSlot5[0]][3], (playSlot5[1], playerCardY, cardWidth, cardHeight))
+			messagetoscreen(str(playSlot5[3]), x=playSlot5[1], y=playSlot5[2] + cardHeight/2)
+			messagetoscreen(str(playSlot5[4]), x=playSlot5[1] + cardWidth - handSpacing, y=playSlot5[2] + cardHeight/2)
+
+		if opponentSlot1[0] != cardIDs[0]:
+			pygame.draw.rect(gameDisplay, cards[opponentSlot1[0]][3], (opponentSlot1[1], opponentCardY, cardWidth, cardHeight))
+			messagetoscreen(str(opponentSlot1[3]), x=opponentSlot1[1], y=opponentSlot1[2] + cardHeight/2)
+			messagetoscreen(str(opponentSlot1[4]), x=opponentSlot1[1] + cardWidth - handSpacing, y=opponentSlot1[2] + cardHeight/2)
+		if opponentSlot2[0] != cardIDs[0]:
+			pygame.draw.rect(gameDisplay, cards[opponentSlot2[0]][3], (opponentSlot2[1], opponentCardY, cardWidth, cardHeight))
+			messagetoscreen(str(opponentSlot2[3]), x=opponentSlot2[1], y=opponentSlot2[2] + cardHeight/2)
+			messagetoscreen(str(opponentSlot2[4]), x=opponentSlot2[1] + cardWidth - handSpacing, y=opponentSlot2[2] + cardHeight/2)
+		if opponentSlot3[0] != cardIDs[0]:
+			pygame.draw.rect(gameDisplay, cards[opponentSlot3[0]][3], (opponentSlot3[1], opponentCardY, cardWidth, cardHeight))
+			messagetoscreen(str(opponentSlot3[3]), x=opponentSlot3[1], y=opponentSlot3[2] + cardHeight/2)
+			messagetoscreen(str(opponentSlot3[4]), x=opponentSlot3[1] + cardWidth - handSpacing, y=opponentSlot3[2] + cardHeight/2)
+		if opponentSlot4[0] != cardIDs[0]:
+			pygame.draw.rect(gameDisplay, cards[opponentSlot4[0]][3], (opponentSlot4[1], opponentCardY, cardWidth, cardHeight))
+			messagetoscreen(str(opponentSlot4[3]), x=opponentSlot4[1], y=opponentSlot4[2] + cardHeight/2)
+			messagetoscreen(str(opponentSlot4[4]), x=opponentSlot4[1] + cardWidth - handSpacing, y=opponentSlot4[2] + cardHeight/2)
+		if opponentSlot5[0] != cardIDs[0]:
+			pygame.draw.rect(gameDisplay, cards[opponentSlot5[0]][3], (opponentSlot5[1], opponentCardY, cardWidth, cardHeight))
+			messagetoscreen(str(opponentSlot5[3]), x=opponentSlot5[1], y=opponentSlot5[2] + cardHeight/2)
+			messagetoscreen(str(opponentSlot5[4]), x=opponentSlot5[1] + cardWidth - handSpacing, y=opponentSlot5[2] + cardHeight/2)
 
 		if fullHandMessageTime > 0:
 			messagetoscreen("Discard or play card before drawing another")
