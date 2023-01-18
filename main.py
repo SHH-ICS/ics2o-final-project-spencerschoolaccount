@@ -11,6 +11,7 @@ green = (0,255,0)
 blue = (0,0,255)
 backgroundColour = (123,78,2)
 playMat = (183,149,98)
+darkRed = (148, 0, 0)
 
 cardWidth = 124
 cardHeight = 181
@@ -38,6 +39,9 @@ font = pygame.font.SysFont(None, 25)
 
 fullHandMessageTime = 0
 
+playerHP = 6
+opponentHP = 6
+
 cards = {
 	"Grud": [1, 2, 1, blue],
 	"LiterallyJustABear": [3, 4, 3, red],
@@ -56,6 +60,11 @@ pygame.display.set_caption('Kartice')
 
 clock = pygame.time.Clock()
 
+def winscreen():
+	win = True
+		while win:
+			gameDisplay.fill(backgroundColour)
+
 def drawcard(slot, isHandSlot=False):
 	pygame.draw.rect(gameDisplay, cards[slot[0]][3], (slot[1], slot[2], cardWidth, cardHeight))
 	if isHandSlot:
@@ -65,12 +74,19 @@ def drawcard(slot, isHandSlot=False):
 		messagetoscreen(str(slot[3]), x=slot[1], y=slot[2] + cardHeight/2)
 		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2)
 
-def messagetoscreen(msg,colour = white, size = 25, x=0,y=0):
+def messagetoscreen(msg,colour = white, size = 25, x=0,y=0, centered = False):
 	textSurf= font.render(msg, True, colour)
-	gameDisplay.blit(textSurf,(x,y))
+	if not centered:
+		gameDisplay.blit(textSurf,(x,y))
+	else:
+		textRect = textSurf.get_rect()
+		textRect.center = x,y
+		gameDisplay.blit(textSurf,textRect)
 
 def gameloop():
 	global fullHandMessageTime
+	global playerHP
+	global opponentHP
 	handSlot1 = [cardIDs[0], 243, displayHeight - (cardHeight + 22)]
 	handSlot2 = [cardIDs[0], handSlot1[1] + cardWidth + handSpacing, handSlot1[2], 0]
 	handSlot3 = [cardIDs[0], handSlot2[1] + cardWidth + handSpacing, handSlot1[2], 0]
@@ -155,7 +171,8 @@ def gameloop():
 			fullHandMessageTime -= 1
 		
 		pygame.display.update()
-	
+
+		
 	gameExit = False
 	while not gameExit:
 		for event in pygame.event.get():
@@ -196,6 +213,22 @@ def gameloop():
 
 						elif mouseX in range(handSlot6[1],handSlot6[1] + cardWidth) and handSlot6[0] != cardIDs[0]:
 							playMode = handSlots[6]
+
+					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(endTurnX,endTurnX + cardWidth) and pygame.mouse.get_pos()[1] in range(endTurnY,endTurnY+cardWidth):
+						for i in range(1,6):
+							if locals()['playSlot' + str(i)][0] != cardIDs[0]:
+								if locals()['opponentSlot' + str(i)][0] != cardIDs[0]:
+									locals()['opponentSlot' + str(i)][4] -= locals()['playSlot' + str(i)][3]
+								else:
+									opponentHP -= locals()['playSlot' + str(i)][3]
+								drawUI()
+								if locals()['opponentSlot' + str(i)][4] <= 0:
+									locals()['opponentSlot' + str(i)][0] = cardIDs[0]
+								clock.tick(2)
+							drawUI()
+							clock.tick(2)
+							if opponentHP <= 0:
+								winscreen()
 				
 				elif playMode != handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
