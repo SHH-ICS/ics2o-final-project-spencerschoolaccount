@@ -35,8 +35,6 @@ endTurnY = pileY - cardWidth - 100
 
 FPS = 30
 
-font = pygame.font.SysFont(None, 25)
-
 fullHandMessageTime = 0
 
 playerHP = 6
@@ -62,8 +60,17 @@ clock = pygame.time.Clock()
 
 def winscreen():
 	win = True
-		while win:
-			gameDisplay.fill(backgroundColour)
+	while win:
+		gameDisplay.fill(backgroundColour)
+		messagetoscreen("You Win!", centered=True, x=displayWidth/2, y=displayHeight/2, size=80)
+		pygame.display.update()
+
+def losescreen():
+	win = True
+	while win:
+		gameDisplay.fill(backgroundColour)
+		messagetoscreen("You Lose.", centered=True, x=displayWidth/2, y=displayHeight/2, size=80)
+		pygame.display.update()
 
 def drawcard(slot, isHandSlot=False):
 	pygame.draw.rect(gameDisplay, cards[slot[0]][3], (slot[1], slot[2], cardWidth, cardHeight))
@@ -75,6 +82,7 @@ def drawcard(slot, isHandSlot=False):
 		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2)
 
 def messagetoscreen(msg,colour = white, size = 25, x=0,y=0, centered = False):
+	font = pygame.font.SysFont(None, size)
 	textSurf= font.render(msg, True, colour)
 	if not centered:
 		gameDisplay.blit(textSurf,(x,y))
@@ -226,9 +234,21 @@ def gameloop():
 									locals()['opponentSlot' + str(i)][0] = cardIDs[0]
 								clock.tick(2)
 							drawUI()
-							clock.tick(2)
 							if opponentHP <= 0:
 								winscreen()
+							else:
+								
+								for i in range(1,6):
+									if locals()['opponentSlot' + str(i)][0] != cardIDs[0]:
+										if locals()['playSlot' + str(i)][0] != cardIDs[0]:
+											locals()['playSlot' + str(i)][0] -= locals()['opponentSlot' + str(i)][3]
+										else:
+											playerHP -= locals()['opponentSlot' + str(i)][3]
+										drawUI()
+										clock.tick(2)
+									drawUI()
+									if playerHP <= 0:
+										losescreen()
 				
 				elif playMode != handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
