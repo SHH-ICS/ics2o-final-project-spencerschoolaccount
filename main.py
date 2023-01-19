@@ -114,9 +114,27 @@ def gameloop():
 	opponentSlot4 = [cardIDs[0], playSlot4[1], opponentCardY, 0, 0]
 	opponentSlot5 = [cardIDs[0], playSlot5[1], opponentCardY, 0, 0]
 
+	opponentHand = []
+
 	discardMode = False
 	handSlots = ('none','handSlot1','handSlot2','handSlot3','handSlot4','handSlot5','handSlot6')
 	playMode = handSlots[0]
+
+	playerDeck = []
+	opponentDeck = []
+
+	for key in cards.keys():
+		playerDeck.append(key)
+		opponentDeck.append(key)
+	
+	for i in range(20 - len(playerDeck)):
+		playerDeck.append(cardIDs[random.randint(1,len(cardIDs)-1)])
+		opponentDeck.append(cardIDs[random.randint(1,len(cardIDs)-1)])
+
+	for i in range(4):
+		opponentCardDrawn = random.randint(0,len(opponentDeck)-1)
+		opponentHand.append(opponentDeck[opponentCardDrawn])
+		del opponentDeck[opponentCardDrawn]
 
 	def drawUI():
 		global fullHandMessageTime
@@ -192,8 +210,15 @@ def gameloop():
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(pileX,pileX+cardWidth) and pygame.mouse.get_pos()[1] in range(pileY, pileY+cardHeight):
 						for i in range(1,7):
 							if locals()['handSlot' + str(i)][0] == cardIDs[0]:
-								locals()['handSlot' + str(i)][0] = cardIDs[random.randint(1,len(cardIDs)-1)]
-								break
+								if len(playerDeck) > 0:
+									cardDrawn = random.randint(0,len(playerDeck)-1)
+									locals()['handSlot' + str(i)][0] = playerDeck[cardDrawn]
+									del playerDeck[cardDrawn]
+									print(len(playerDeck))
+									break
+								else:
+									locals()['handSlot' + str(i)][0] = cardIDs[1]
+									break
 							else:
 								if i == 6:
 									fullHandMessageTime = 2 * FPS
@@ -237,7 +262,9 @@ def gameloop():
 							if opponentHP <= 0:
 								winscreen()
 							else:
-								
+								opponentCardDrawn = random.randint(0,len(opponentDeck)-1)
+								opponentHand.append(opponentDeck[opponentCardDrawn])
+								del opponentDeck[opponentCardDrawn]
 								for i in range(1,6):
 									if locals()['opponentSlot' + str(i)][0] != cardIDs[0]:
 										if locals()['playSlot' + str(i)][0] != cardIDs[0]:
