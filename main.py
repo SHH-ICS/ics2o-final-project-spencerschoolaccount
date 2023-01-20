@@ -35,10 +35,10 @@ endTurnY = pileY - cardWidth - 100
 
 FPS = 30
 
-fullHandMessageTime = 0
+messageTime = 0
 
-playerHP = 6
-opponentHP = 6
+playerHP = 24
+opponentHP = 24
 
 cards = {
 	"Grud": [1, 2, 1, blue],
@@ -92,7 +92,7 @@ def messagetoscreen(msg,colour = white, size = 25, x=0,y=0, centered = False):
 		gameDisplay.blit(textSurf,textRect)
 
 def gameloop():
-	global fullHandMessageTime
+	global messageTime
 	global playerHP
 	global opponentHP
 	handSlot1 = [cardIDs[0], 243, displayHeight - (cardHeight + 22)]
@@ -120,8 +120,11 @@ def gameloop():
 	handSlots = ('none','handSlot1','handSlot2','handSlot3','handSlot4','handSlot5','handSlot6')
 	playMode = handSlots[0]
 
+	message = ''
+	
 	playerDeck = []
 	opponentDeck = []
+	cardsToBeDrawn = 3
 
 	for key in cards.keys():
 		playerDeck.append(key)
@@ -137,7 +140,7 @@ def gameloop():
 		del opponentDeck[opponentCardDrawn]
 
 	def drawUI():
-		global fullHandMessageTime
+		global messageTime
 		gameDisplay.fill(backgroundColour)
 		pygame.draw.rect(gameDisplay, playMat, (240,20,800,474))
 		
@@ -192,9 +195,12 @@ def gameloop():
 		if opponentSlot5[0] != cardIDs[0]:
 			drawcard(opponentSlot5)
 
-		if fullHandMessageTime > 0:
-			messagetoscreen("Discard or play card before drawing another")
-			fullHandMessageTime -= 1
+		if messageTime > 0:
+			messagetoscreen(message)
+			messageTime -= 1
+
+		messagetoscreen("Your Health: " + str(playerHP), y=displayHeight-25, size=30)
+		messagetoscreen("Opponent's Health: " +str(opponentHP), x=displayWidth-220, size=30)
 		
 		pygame.display.update()
 
@@ -205,23 +211,28 @@ def gameloop():
 			if event.type == pygame.QUIT:
 				gameExit = True
 
-			elif event.type == pygame.MOUSEBUTTONUP:
+			elif event.type == pygame.MOUSEBUTTONDOWN:
 				if not discardMode and playMode == handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(pileX,pileX+cardWidth) and pygame.mouse.get_pos()[1] in range(pileY, pileY+cardHeight):
-						for i in range(1,7):
-							if locals()['handSlot' + str(i)][0] == cardIDs[0]:
-								if len(playerDeck) > 0:
-									cardDrawn = random.randint(0,len(playerDeck)-1)
-									locals()['handSlot' + str(i)][0] = playerDeck[cardDrawn]
-									del playerDeck[cardDrawn]
-									print(len(playerDeck))
-									break
+						if cardsToBeDrawn >= 1:
+							for i in range(1,7):
+								if locals()['handSlot' + str(i)][0] == cardIDs[0]:
+									if len(playerDeck) > 0:
+										cardDrawn = random.randint(0,len(playerDeck)-1)
+										locals()['handSlot' + str(i)][0] = playerDeck[cardDrawn]
+										del playerDeck[cardDrawn]
+										print(len(playerDeck))
+										cardsToBeDrawn -= 1
+										break
+									else:
+										locals()['handSlot' + str(i)][0] = cardIDs[1]
+										cardsToBeDrawn -= 1
+										break
 								else:
-									locals()['handSlot' + str(i)][0] = cardIDs[1]
-									break
-							else:
-								if i == 6:
-									fullHandMessageTime = 2 * FPS
+									if i == 6:
+										messageTime = 2 * FPS
+										message = 
+						else:
 	
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(discardX,discardX+cardWidth) and pygame.mouse.get_pos()[1] in range(discardY, discardY+cardHeight):
 						discardMode = True
@@ -258,24 +269,42 @@ def gameloop():
 								if locals()['opponentSlot' + str(i)][4] <= 0:
 									locals()['opponentSlot' + str(i)][0] = cardIDs[0]
 								clock.tick(2)
-							drawUI()
-							if opponentHP <= 0:
-								winscreen()
-							else:
-								opponentCardDrawn = random.randint(0,len(opponentDeck)-1)
-								opponentHand.append(opponentDeck[opponentCardDrawn])
-								del opponentDeck[opponentCardDrawn]
-								for i in range(1,6):
-									if locals()['opponentSlot' + str(i)][0] != cardIDs[0]:
-										if locals()['playSlot' + str(i)][0] != cardIDs[0]:
-											locals()['playSlot' + str(i)][0] -= locals()['opponentSlot' + str(i)][3]
-										else:
-											playerHP -= locals()['opponentSlot' + str(i)][3]
-										drawUI()
-										clock.tick(2)
+						drawUI()
+						if opponentHP <= 0:
+							winscreen()
+						else:
+							opponentCardDrawn = random.randint(0,len(opponentDeck)-1)
+							opponentHand.append(opponentDeck[opponentCardDrawn])
+							del opponentDeck[opponentCardDrawn]
+							for i in range(3):
+								if opponentSlot1[0] != cardIDs[0] and opponentSlot2[0] != cardIDs[0] and opponentSlot3[0] != cardIDs[0] and opponentSlot4[0] != cardIDs[0] and opponentSlot5[0] != cardIDs[0]:
+									break
+								while True:
+									randomSlot = random.randint(1,5)
+									if locals()['opponentSlot' + str(randomSlot)][0] == cardIDs[0]:
+										break
+								randomCard = random.randint(0,len(opponentHand)-1)
+								locals()['opponentSlot' + str(randomSlot)][0] = opponentHand[randomCard]
+								locals()['opponentSlot' + str(randomSlot)][3] = cards[opponentHand[randomCard]][0]
+								locals()['opponentSlot' + str(randomSlot)][4] = cards[opponentHand[randomCard]][1]
+								del opponentHand[randomCard]
+								drawUI()
+								if random.randint(0,1) == 1:
+									break
+								
+							for i in range(1,6):
+								if locals()['opponentSlot' + str(i)][0] != cardIDs[0]:
+									if locals()['playSlot' + str(i)][0] != cardIDs[0]:
+										locals()['playSlot' + str(i)][4] -= locals()['opponentSlot' + str(i)][3]
+									else:
+										playerHP -= locals()['opponentSlot' + str(i)][3]
+									if locals()['playSlot' + str(i)][4] <= 0:
+										locals()['playSlot' + str(i)][0] = cardIDs[0]
 									drawUI()
-									if playerHP <= 0:
-										losescreen()
+									clock.tick(2)
+								drawUI()
+								if playerHP <= 0:
+									losescreen()
 				
 				elif playMode != handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
