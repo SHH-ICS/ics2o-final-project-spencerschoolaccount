@@ -58,18 +58,30 @@ pygame.display.set_caption('Kartice')
 
 clock = pygame.time.Clock()
 
-def winscreen():
-	win = True
-	while win:
+def endscreen(win):
+	end = True
+	while end:
+		if win:
+			resultMessage = "You Win!"
+		else:
+			resultMessage = "You Lose"
 		gameDisplay.fill(backgroundColour)
-		messagetoscreen("You Win!", centered=True, x=displayWidth/2, y=displayHeight/2, size=80)
-		pygame.display.update()
-
-def losescreen():
-	win = True
-	while win:
-		gameDisplay.fill(backgroundColour)
-		messagetoscreen("You Lose.", centered=True, x=displayWidth/2, y=displayHeight/2, size=80)
+		messagetoscreen(resultMessage, centered=True, x=displayWidth/2, y=(displayHeight/2)-20, size=80)
+		messagetoscreen("Press r to play again or q to quit", centered = True, x=displayWidth/2, y=(displayHeight/2)+25)
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				quit()
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_r:
+					global playerHP
+					global opponentHP
+					playerHP = 24
+					opponentHP = 24
+					gameloop()
+				elif event.key == pygame.K_q:
+					pygame.quit()
+					quit()
 		pygame.display.update()
 
 def drawcard(slot, isHandSlot=False):
@@ -231,8 +243,10 @@ def gameloop():
 								else:
 									if i == 6:
 										messageTime = 2 * FPS
-										message = 
+										message = "Discard or play card before drawing another"
 						else:
+							messageTime = 2 * FPS
+							message = "You may not draw another card this turn"
 	
 					elif event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[0] in range(discardX,discardX+cardWidth) and pygame.mouse.get_pos()[1] in range(discardY, discardY+cardHeight):
 						discardMode = True
@@ -271,7 +285,7 @@ def gameloop():
 								clock.tick(2)
 						drawUI()
 						if opponentHP <= 0:
-							winscreen()
+							endscreen(True)
 						else:
 							opponentCardDrawn = random.randint(0,len(opponentDeck)-1)
 							opponentHand.append(opponentDeck[opponentCardDrawn])
@@ -283,11 +297,12 @@ def gameloop():
 									randomSlot = random.randint(1,5)
 									if locals()['opponentSlot' + str(randomSlot)][0] == cardIDs[0]:
 										break
-								randomCard = random.randint(0,len(opponentHand)-1)
-								locals()['opponentSlot' + str(randomSlot)][0] = opponentHand[randomCard]
-								locals()['opponentSlot' + str(randomSlot)][3] = cards[opponentHand[randomCard]][0]
-								locals()['opponentSlot' + str(randomSlot)][4] = cards[opponentHand[randomCard]][1]
-								del opponentHand[randomCard]
+								if len(opponentHand) >= 1:
+									randomCard = random.randint(0,len(opponentHand)-1)
+									locals()['opponentSlot' + str(randomSlot)][0] = opponentHand[randomCard]
+									locals()['opponentSlot' + str(randomSlot)][3] = cards[opponentHand[randomCard]][0]
+									locals()['opponentSlot' + str(randomSlot)][4] = cards[opponentHand[randomCard]][1]
+									del opponentHand[randomCard]
 								drawUI()
 								if random.randint(0,1) == 1:
 									break
@@ -302,9 +317,10 @@ def gameloop():
 										locals()['playSlot' + str(i)][0] = cardIDs[0]
 									drawUI()
 									clock.tick(2)
-								drawUI()
-								if playerHP <= 0:
-									losescreen()
+							drawUI()
+							if playerHP <= 0:
+								endscreen(False)
+							cardsToBeDrawn = 1
 				
 				elif playMode != handSlots[0]:
 					if event.button == pygame.BUTTON_LEFT and pygame.mouse.get_pos()[1] in range(playerCardY,playerCardY+cardHeight):
