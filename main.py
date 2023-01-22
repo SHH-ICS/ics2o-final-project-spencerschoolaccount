@@ -72,6 +72,9 @@ cardIDs = tuple(tempCardIDList)
 gameDisplay = pygame.display.set_mode((displayWidth,displayHeight))
 pygame.display.set_caption('Kartice')
 
+icon = pygame.image.load('Sprites/karticeIcon.png')
+pygame.display.set_icon(icon)
+
 clock = pygame.time.Clock()
 
 def endscreen(win):
