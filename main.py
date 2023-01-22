@@ -42,9 +42,13 @@ opponentHP = 24
 
 cards = {
 	"Grud": [1, 2, 1, blue],
-	"LiterallyJustABear": [3, 4, 3, red],
+	"LiterallyJustABear": [4, 4, 4, red],
 	"Ferret": [1, 3, 2, green],
-	"RatsRatsWe'reTheRats": [3, 1, 2, pink]
+	"RatsRatsWe'reTheRats": [3, 1, 2, pink],
+	"Rock": [0, 6, 1, red],
+	"GuyWhoJustGotLostWhileCamping": [2, 1, 1, red],
+	"Raven": [2, 3, 3, red],
+	"Wolf": [3, 2, 3, red]
 }
 
 tempCardIDList = ['none']
@@ -90,8 +94,12 @@ def drawcard(slot, isHandSlot=False):
 		messagetoscreen(str(cards[slot[0]][0]), x=slot[1], y=slot[2] + cardHeight/2)
 		messagetoscreen(str(cards[slot[0]][1]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2)
 	else:
-		messagetoscreen(str(slot[3]), x=slot[1], y=slot[2] + cardHeight/2)
-		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2)
+		if slot[4] < cards[slot[0]][1]:
+			healthColour = darkRed
+		else:
+			healthColour = white
+		messagetoscreen(str(slot[3]), x=slot[1], y=slot[2] + cardHeight/2,)
+		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2, colour = healthColour)
 
 def messagetoscreen(msg,colour = white, size = 25, x=0,y=0, centered = False):
 	font = pygame.font.SysFont(None, size)
