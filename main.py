@@ -40,15 +40,27 @@ messageTime = 0
 playerHP = 24
 opponentHP = 24
 
+bearCard = pygame.image.load('Sprites/bearCard.png')
+camperCard = pygame.image.load('Sprites/camperCard.png')
+discardPile = pygame.image.load('Sprites/discardPile.png')
+drawPile = pygame.image.load('Sprites/drawPile.png')
+endTurn = pygame.image.load('Sprites/endTurn.png')
+ferretCard = pygame.image.load('Sprites/ferretCard.png')
+grudCard = pygame.image.load('Sprites/grudCard.png')
+ratCard = pygame.image.load('Sprites/ratCard.png')
+ravenCard = pygame.image.load('Sprites/ravenCard.png')
+rockCard = pygame.image.load('Sprites/rockCard.png')
+wolfCard = pygame.image.load('Sprites/wolfCard.png')
+
 cards = {
-	"Grud": [1, 2, 1, blue],
-	"LiterallyJustABear": [4, 4, 4, red],
-	"Ferret": [1, 3, 2, green],
-	"RatsRatsWe'reTheRats": [3, 1, 2, pink],
-	"Rock": [0, 6, 1, red],
-	"GuyWhoJustGotLostWhileCamping": [2, 1, 1, red],
-	"Raven": [2, 3, 3, red],
-	"Wolf": [3, 2, 3, red]
+	"Grud": [1, 2, 1, grudCard],
+	"LiterallyJustABear": [4, 4, 4, bearCard],
+	"Ferret": [1, 3, 2, ferretCard],
+	"RatsRatsWe'reTheRats": [3, 1, 2, ratCard],
+	"Rock": [0, 6, 1, rockCard],
+	"GuyWhoJustGotLostWhileCamping": [2, 1, 1, camperCard],
+	"Raven": [2, 3, 3, ravenCard],
+	"Wolf": [3, 2, 3, wolfCard]
 }
 
 tempCardIDList = ['none']
@@ -89,17 +101,17 @@ def endscreen(win):
 		pygame.display.update()
 
 def drawcard(slot, isHandSlot=False):
-	pygame.draw.rect(gameDisplay, cards[slot[0]][3], (slot[1], slot[2], cardWidth, cardHeight))
+	gameDisplay.blit(cards[slot[0]][3], (slot[1], slot[2]))
 	if isHandSlot:
-		messagetoscreen(str(cards[slot[0]][0]), x=slot[1], y=slot[2] + cardHeight/2)
-		messagetoscreen(str(cards[slot[0]][1]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2)
+		messagetoscreen(str(cards[slot[0]][0]), x=slot[1] + 22, y=slot[2] + cardHeight/2 + 15, size=30)
+		messagetoscreen(str(cards[slot[0]][1]), x=slot[1] + cardWidth - handSpacing - 21, y=slot[2] + cardHeight/2 + 15, size=30)
 	else:
 		if slot[4] < cards[slot[0]][1]:
 			healthColour = darkRed
 		else:
 			healthColour = white
-		messagetoscreen(str(slot[3]), x=slot[1], y=slot[2] + cardHeight/2,)
-		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing, y=slot[2] + cardHeight/2, colour = healthColour)
+		messagetoscreen(str(slot[3]), x=slot[1] + 22, y=slot[2] + cardHeight/2 + 15, size = 30)
+		messagetoscreen(str(slot[4]), x=slot[1] + cardWidth - handSpacing -21, y=slot[2] + cardHeight/2 + 15, colour = healthColour, size = 30)
 
 def messagetoscreen(msg,colour = white, size = 25, x=0,y=0, centered = False):
 	font = pygame.font.SysFont(None, size)
@@ -176,9 +188,9 @@ def gameloop():
 		pygame.draw.rect(gameDisplay, backgroundColour, (playSlot4[1], playerCardY, cardWidth, cardHeight))
 		pygame.draw.rect(gameDisplay, backgroundColour, (playSlot5[1], playerCardY, cardWidth, cardHeight))
 
-		pygame.draw.rect(gameDisplay, blue, (pileX, pileY, cardWidth, cardHeight))
-		pygame.draw.rect(gameDisplay, green, (discardX, discardY, cardWidth, cardHeight))
-		pygame.draw.rect(gameDisplay, red, (endTurnX, endTurnY, cardWidth, cardWidth))
+		gameDisplay.blit(drawPile, (pileX, pileY))
+		gameDisplay.blit(discardPile, (discardX, discardY))
+		gameDisplay.blit(endTurn, (endTurnX, endTurnY))
 
 		if handSlot1[0] != cardIDs[0]:
 			drawcard(handSlot1, True)
