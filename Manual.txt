@@ -1,0 +1,13 @@
+KARTICE MANUAL
+
+The goal of Kartice to lower the opponent's health to zero.
+
+Click the card on the left to draw a card. On your first turn you can draw three cards but on every other turn you may only draw one
+
+Click the card on the right to discard a card oof your choice. Click on the card after clicking the discard card to discard it. You may discard either a card in your hand, or a card that you have played. If you wish to cancel discarding a card just click on the discard card again
+
+Click on any card in your hand to play it. Once you have clicked on a card, click any slot in the lower row above your hand. 
+
+Once you have finished playing your cards, click end turn. Your cards will attack the opponent. If there is a card in front of your card it will attack that card, lowering that card's health (the number on the right side of the card) by your card's attack stat (the number on the left side of the card). If there is no card in front of your card, your card will directly attack the opponent, lowering the opponent's health by your attack stat.
+
+After thisit will be the opponent's turn. The opponent will play cards and then those cards will attack you. Like wise if one of the opponent's is in front of one of your cards, it will attack that card. If there isn't it will attack you directly lowering your health. If your health drops to zero you lose.
