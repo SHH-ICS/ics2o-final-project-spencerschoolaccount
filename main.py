@@ -35,7 +35,7 @@ endTurnY = pileY - cardWidth - 100
 
 FPS = 30
 
-messageTime = 0
+messageTime = 3 * FPS
 
 playerHP = 24
 opponentHP = 24
@@ -130,6 +130,7 @@ def gameloop():
 	global messageTime
 	global playerHP
 	global opponentHP
+	message = "Click show files and then go to Manual.txt to learn how to play the game"
 	handSlot1 = [cardIDs[0], 243, displayHeight - (cardHeight + 22)]
 	handSlot2 = [cardIDs[0], handSlot1[1] + cardWidth + handSpacing, handSlot1[2], 0]
 	handSlot3 = [cardIDs[0], handSlot2[1] + cardWidth + handSpacing, handSlot1[2], 0]
@@ -154,8 +155,6 @@ def gameloop():
 	discardMode = False
 	handSlots = ('none','handSlot1','handSlot2','handSlot3','handSlot4','handSlot5','handSlot6')
 	playMode = handSlots[0]
-
-	message = ''
 	
 	playerDeck = []
 	opponentDeck = []
